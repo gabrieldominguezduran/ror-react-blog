@@ -3,7 +3,7 @@ import React from "react";
 
 const Home = () => (
   <div className="container d-flex justify-content-center">
-    <h1 className="m-5">My Blog</h1>
+    <h1 className="m-5">My Blog test</h1>
   </div>
 )
 
