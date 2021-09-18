@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import Listing from "./Listing";
+import Form from "./Form";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
 
   const [showArticles, setShowArticles] = useState(false);
+  const [createArticles, setCreateArticles] = useState(false);
 
   useEffect(() => {
     const url = "/load_articles.json";
@@ -37,30 +40,37 @@ export default function Home() {
       </div>
     </div>
   );
-  let articleCard = (articles || []).map((ar) => {
-    return (
-      <div key={ar.id} className="card mb-4 p-2">
-        <div className="card-body">
-          <h5 className="card-title">{ar.title}</h5>
-          <h6 className="card-subtitle mb-2 text-muted">{ar.author}</h6>
-          <p className="card-text">{ar.text}</p>
-        </div>
-      </div>
-    );
-  });
 
   return (
     <div className="container">
       <h1 className="display-1 text-center m-5">Blog</h1>
       <div className="container p-3">
-        <button
-          type="button"
-          className="btn btn-dark mb-2"
-          onClick={() => setShowArticles(!showArticles)}
-        >
-          {showArticles ? "Hide" : "Show"} Posts
-        </button>
-        {showArticles ? articleCard : mainImg}
+        <div className="d-flex justify-content-between">
+          {!createArticles ? (
+            <button
+              type="button"
+              className="btn btn-dark mb-2"
+              onClick={() => setShowArticles(!showArticles)}
+            >
+              {showArticles ? "Hide" : "Show"} posts
+            </button>
+          ) : null}
+
+          <button
+            type="button"
+            className="btn btn-dark mb-2"
+            onClick={() => setCreateArticles(!createArticles)}
+          >
+            {createArticles ? "Back to posts" : "Create a post"}
+          </button>
+        </div>
+        {createArticles ? (
+          <Form createArticles={createArticles} />
+        ) : showArticles ? (
+          <Listing articles={articles} />
+        ) : (
+          mainImg
+        )}
       </div>
     </div>
   );
