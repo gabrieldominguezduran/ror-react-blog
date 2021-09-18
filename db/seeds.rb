@@ -5,3 +5,25 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+unless Author.all.length > 0
+  require 'faker'
+  p 'SEEDING AUTHORS'
+  5.times do 
+    Author.create({
+      name: Faker::TvShows::GameOfThrones.character
+    })
+  end
+end
+
+unless Article.all.length > 0
+  require 'faker'
+  p 'SEEDING ARTICLES'
+  10.times do 
+    Article.create(
+      title: Faker::Quote.most_interesting_man_in_the_world,
+      text: Faker::Lorem.paragraph_by_chars(number: 256, supplemental: false),
+      author_id: rand(1..5)
+    )
+  end
+end
