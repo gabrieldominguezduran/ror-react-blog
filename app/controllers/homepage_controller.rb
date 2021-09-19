@@ -1,7 +1,7 @@
 class HomepageController < ApplicationController
   skip_forgery_protection 
   def load_articles
-    articles = Article.load_authors_names
+    articles = Article.order(created_at: :desc).load_authors_names
     render json: articles
   end
 
@@ -22,7 +22,7 @@ class HomepageController < ApplicationController
       :author_id => author.id
     })
 
-    articles = Article.load_authors_names
+    articles = Article.order(created_at: :desc).load_authors_names
     render json: articles
   end
 end

@@ -71,7 +71,7 @@ export default function Home() {
           </button>
         </div>
         {createArticles ? (
-          <Form createArticles={createArticles} articles={articles} />
+          <Form createArticles={createArticles} setArticles={setArticles} />
         ) : showArticles ? (
           <Listing articles={articles} />
         ) : (

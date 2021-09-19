@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export default function Form(props) {
   const [post, setPost] = useState({
@@ -20,8 +20,11 @@ export default function Form(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (post.author !== "" && post.title !== "" && post.text !== "") {
-      console.log(post);
+    if (
+      post.author.replace(/\s+/g, "").length > 2 &&
+      post.title.replace(/\s+/g, "").length > 3 &&
+      post.text.replace(/\s+/g, "").length > 5
+    ) {
       setNotValid(false);
       const data = { post };
       const requestOptions = {
@@ -31,7 +34,7 @@ export default function Form(props) {
       };
       fetch("/create_articles", requestOptions)
         .then((response) => response.json())
-        .then((res) => console.log(res));
+        .then((res) => props.setArticles(res));
 
       setPost({
         author: "",
@@ -45,7 +48,7 @@ export default function Form(props) {
   return (
     <form action="post">
       {notValid ? (
-        <p className="display-5 text-danger">Please fill al the fields</p>
+        <p className="display-5 text-danger">Please complete all the fields</p>
       ) : null}
       <div className="mb-3 mt-3">
         <label htmlFor="author" className="form-label display-5">
@@ -58,7 +61,6 @@ export default function Form(props) {
           name="author"
           value={post.author}
           onChange={onChangeHandler}
-          required
           placeholder="Author name"
         />
         <label htmlFor="title" className="form-label display-5">
@@ -70,7 +72,6 @@ export default function Form(props) {
           id="title"
           name="title"
           onChange={onChangeHandler}
-          required
           value={post.title}
           placeholder="Post title"
         />
@@ -86,7 +87,6 @@ export default function Form(props) {
           rows="6"
           value={post.text}
           onChange={onChangeHandler}
-          required
         ></textarea>
       </div>
       <button type="submit" className="btn btn-dark" onClick={handleSubmit}>
