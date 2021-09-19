@@ -1,65 +1,91 @@
 import React, { useState, useEffect } from "react";
 
 export default function Form(props) {
-  const [author, setAuthor] = useState("");
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [post, setPost] = useState({
+    author: "",
+    title: "",
+    text: "",
+  });
 
-  const onAuthorNameChange = (e) => setTitle(e.target.value);
-  const onTitleChange = (e) => setTitle(e.target.value);
-  const onBodyChange = (e) => setBody(e.target.value);
+  const [notValid, setNotValid] = useState(null);
 
+  const onChangeHandler = (e) => {
+    const value = e.target.value;
+    const name = e.target.name;
+    setPost({
+      ...post,
+      [name]: value,
+    });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = { author, text, title };
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    };
-    fetch("/create_article", requestOptions)
-      .then((response) => response.json())
-      .then((res) => console.log(res));
+    if (post.author !== "" && post.title !== "" && post.text !== "") {
+      console.log(post);
+      setNotValid(false);
+      const data = { post };
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      };
+      fetch("/create_articles", requestOptions)
+        .then((response) => response.json())
+        .then((res) => console.log(res));
+
+      setPost({
+        author: "",
+        title: "",
+        text: "",
+      });
+    } else {
+      setNotValid(true);
+    }
   };
   return (
     <form action="post">
-      <div className="mb-3">
-        <label for="author" class="form-label">
-          Post author
+      {notValid ? (
+        <p className="display-5 text-danger">Please fill al the fields</p>
+      ) : null}
+      <div className="mb-3 mt-3">
+        <label htmlFor="author" className="form-label display-5">
+          Posted By
         </label>
         <input
           type="text"
           className="form-control"
           id="author"
-          value={author}
-          onChange={onAuthorNameChange}
+          name="author"
+          value={post.author}
+          onChange={onChangeHandler}
           required
           placeholder="Author name"
         />
-        <label for="title" class="form-label">
-          Post title
+        <label htmlFor="title" className="form-label display-5">
+          Title
         </label>
         <input
           type="text"
           className="form-control"
           id="title"
-          onChange={onBodyChange}
+          name="title"
+          onChange={onChangeHandler}
           required
-          value={title}
+          value={post.title}
           placeholder="Post title"
         />
       </div>
-      <div class="mb-3">
-        <label for="post" class="form-label">
+      <div className="mb-3">
+        <label htmlFor="post" className="form-label display-5">
           Post
         </label>
         <textarea
           className="form-control"
-          id="post"
+          id="text"
+          name="text"
           rows="6"
-          value={text}
-          onChange={onTitleChange}
+          value={post.text}
+          onChange={onChangeHandler}
           required
         ></textarea>
       </div>

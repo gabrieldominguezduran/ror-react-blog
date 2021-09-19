@@ -45,7 +45,13 @@ export default function Home() {
     <div className="container">
       <h1 className="display-1 text-center m-5">Blog</h1>
       <div className="container p-3">
-        <div className="d-flex justify-content-between">
+        <div
+          className={
+            createArticles
+              ? "d-flex justify-content-end"
+              : "d-flex justify-content-between"
+          }
+        >
           {!createArticles ? (
             <button
               type="button"
@@ -65,7 +71,7 @@ export default function Home() {
           </button>
         </div>
         {createArticles ? (
-          <Form createArticles={createArticles} />
+          <Form createArticles={createArticles} articles={articles} />
         ) : showArticles ? (
           <Listing articles={articles} />
         ) : (
